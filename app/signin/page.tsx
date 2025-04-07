@@ -7,7 +7,7 @@ export default function AuthPage() {
 
   const handleSignIn = () => {
     // For demo, simply redirect to homepage
-    router.push("/calendar");
+    router.push("/home");
   };
 
   const handleCreateAccount = () => {
