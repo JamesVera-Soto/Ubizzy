@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday } from "date-fns"
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, startOfWeek, endOfWeek } from "date-fns"
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,15 +14,17 @@ import {
   Repeat,
   Bot,
 } from "lucide-react"
-import { useTaskStore } from "../stores/taskStore"
+import { useTaskStore } from "../../stores/taskStore"
 import Image from "next/image"
-import ChatBot from "./ChatBot"
+import ChatBot from "@/components/ChatBot"
+import { useRouter } from "next/navigation";
 
 interface CalendarViewProps {
-  onBack: () => void
+    onBack: () => void
 }
 
 const CalendarView: React.FC<CalendarViewProps> = ({ onBack }) => {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
   const { tasks, events, habits } = useTaskStore()
@@ -30,7 +32,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({ onBack }) => {
 
   const monthStart = startOfMonth(currentDate)
   const monthEnd = endOfMonth(currentDate)
-  const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
+  const weekStart = startOfWeek(monthStart)
+  const weekEnd = endOfWeek(monthEnd)
+  const days = eachDayOfInterval({ start: weekStart, end: weekEnd })
 
   const getItemsForDate = (date: Date) => {
     const dayStr = format(date, "yyyy-MM-dd")
@@ -276,7 +280,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ onBack }) => {
           <div className="grid grid-cols-7 gap-px">
             {days.map((day) => {
               const isSelected = selectedDay && format(selectedDay, "yyyy-MM-dd") === format(day, "yyyy-MM-dd")
-
+              
               return (
                 <div
                   key={day.toString()}
@@ -317,11 +321,11 @@ const CalendarView: React.FC<CalendarViewProps> = ({ onBack }) => {
             <CalIcon className="w-6 h-6" />
             <span className="text-xs">Calendar</span>
           </button>
-          <button onClick={onBack} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
+          <button onClick={() => router.push('/home')} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
             <Home className="w-6 h-6" />
             <span className="text-xs">Home</span>
           </button>
-          <button className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
+          <button onClick={() => router.push('/profile')} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
             <User className="w-6 h-6" />
             <span className="text-xs">Profile</span>
           </button>

@@ -2,18 +2,20 @@
 
 import type React from "react"
 
-import { useAuthStore } from "../stores/authStore"
-import { useTaskStore } from "../stores/taskStore"
+import { useAuthStore } from "@/stores/authStore"
+import { useTaskStore } from "@/stores/taskStore"
 import { User, LogOut, BarChart2, ArrowLeft, Home, CalendarIcon, Bot } from "lucide-react"
 import Image from "next/image"
-import ChatBot from "./ChatBot"
+import ChatBot from "@/components/ChatBot"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface ProfileScreenProps {
   onBack: () => void
 }
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack }) => {
+  const router = useRouter();
   const { user, logout } = useAuthStore()
   const { tasks, events, habits } = useTaskStore()
 
@@ -146,15 +148,15 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack }) => {
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-around">
-          <button className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
+          <button onClick={() => router.push('calendar')} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
             <CalendarIcon className="w-6 h-6" />
             <span className="text-xs">Calendar</span>
           </button>
-          <button onClick={onBack} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
+          <button onClick={() => router.push('/home')} className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600">
             <Home className="w-6 h-6" />
             <span className="text-xs">Home</span>
           </button>
-          <button className="p-2 flex flex-col items-center text-purple-600">
+          <button onClick={() => router.push('/profile')} className="p-2 flex flex-col items-center text-purple-600">
             <User className="w-6 h-6" />
             <span className="text-xs">Profile</span>
           </button>

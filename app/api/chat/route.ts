@@ -1,5 +1,5 @@
-import { streamText } from "ai"
-import { openai } from "@ai-sdk/openai"
+import { streamText } from "../../../node_modules/ai"
+import { openai } from "../../../node_modules/@ai-sdk/openai"
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30

@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import HomeScreen from "@/components/HomeScreen"
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -27,7 +29,6 @@ export default function Home() {
       </div>
     )
   }
-
-  return <HomeScreen />
+  router.push('signin');
 }
 

@@ -20,21 +20,23 @@ import {
   Bot,
 } from "lucide-react"
 import { useSwipeable } from "react-swipeable"
-import { useTaskStore } from "../stores/taskStore"
-import type { Task, Event, Habit } from "../types"
-import CalendarView from "./CalendarView"
-import TaskForm from "./TaskForm"
-import EventForm from "./EventForm"
-import HabitForm from "./HabitForm"
-import ProfileScreen from "./ProfileScreen"
+import { useTaskStore } from "@/stores/taskStore"
+import type { Task, Event, Habit } from "../../types"
+import CalendarView from "../calendar/page"
+import TaskForm from "@/components/TaskForm"
+import EventForm from "@/components/EventForm"
+import HabitForm from "@/components/HabitForm"
+import ProfileScreen from "../profile/page"
 import Image from "next/image"
 // Import the ChatBot component at the top of the file
-import ChatBot from "./ChatBot"
+import ChatBot from "@/components/ChatBot"
+import { useRouter } from "next/navigation"
 
 type FormType = "task" | "event" | "habit" | null
 type ViewType = "home" | "calendar" | "profile"
 
 const HomeScreen = () => {
+  const router = useRouter();
   const {
     getTodayItems,
     completeTask,
@@ -67,33 +69,6 @@ const HomeScreen = () => {
     console.log("Today's items:", { tasks: todayTasks, events: todayEvents, habits: todayHabits })
     console.log("All items:", { tasks: allTasks, events: allEvents, habits: allHabits })
   }, [todayTasks, todayEvents, todayHabits, allTasks, allEvents, allHabits])
-
-  // Handle view transitions
-  const changeView = (newView: ViewType, direction: "left" | "right") => {
-    setSlideDirection(direction)
-    setCurrentView(newView)
-
-    // Reset slide direction after animation completes
-    setTimeout(() => {
-      setSlideDirection(null)
-    }, 300)
-  }
-
-  const handlers = useSwipeable({
-    onSwipedRight: () => {
-      if (currentView === "home") changeView("calendar", "right")
-      else if (currentView === "profile") changeView("home", "right")
-    },
-    onSwipedLeft: () => {
-      if (currentView === "home") changeView("profile", "left")
-      else if (currentView === "calendar") changeView("home", "left")
-    },
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-    delta: 10,
-    swipeDuration: 500,
-    touchEventOptions: { passive: false },
-  })
 
   // Sort tasks by due date
   const sortTasks = (tasks: Task[]) => {
@@ -286,12 +261,6 @@ const HomeScreen = () => {
 
   // Render the appropriate view
   const renderView = () => {
-    switch (currentView) {
-      case "calendar":
-        return <CalendarView onBack={() => changeView("home", "left")} />
-      case "profile":
-        return <ProfileScreen onBack={() => changeView("home", "right")} />
-      default:
         return (
           <div className="min-h-screen bg-gray-50">
             {/* Header */}
@@ -317,13 +286,13 @@ const HomeScreen = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => changeView("calendar", "right")}
+                      onClick={() => router.push("/calendar")}
                       className="p-2 rounded-full hover:bg-purple-500 text-white"
                     >
                       <CalendarIcon className="w-6 h-6" />
                     </button>
                     <button
-                      onClick={() => changeView("profile", "left")}
+                      onClick={() => router.push("/profile")}
                       className="p-2 rounded-full hover:bg-purple-500 text-white"
                     >
                       <User className="w-6 h-6" />
@@ -395,7 +364,7 @@ const HomeScreen = () => {
             </div>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 pb-20" {...handlers}>
+            <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 pb-20">
               <div className="space-y-6">
                 {/* Upcoming Legend - Only show in upcoming view */}
                 {activeTab === "all" && (
@@ -569,21 +538,21 @@ const HomeScreen = () => {
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t py-2 px-4">
               <div className="max-w-7xl mx-auto flex justify-around">
                 <button
-                  onClick={() => changeView("calendar", "right")}
+                  onClick={() => router.push("/calendar")}
                   className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600"
                 >
                   <CalendarIcon className="w-6 h-6" />
                   <span className="text-xs">Calendar</span>
                 </button>
                 <button
-                  onClick={() => changeView("home", "right")}
+                  onClick={() => router.push("/home")}
                   className="p-2 flex flex-col items-center text-purple-600"
                 >
                   <Home className="w-6 h-6" />
                   <span className="text-xs">Home</span>
                 </button>
                 <button
-                  onClick={() => changeView("profile", "left")}
+                  onClick={() => router.push("/profile")}
                   className="p-2 flex flex-col items-center text-gray-500 hover:text-purple-600"
                 >
                   <User className="w-6 h-6" />
@@ -593,7 +562,6 @@ const HomeScreen = () => {
             </div>
           </div>
         )
-    }
   }
 
   // New Item Menu

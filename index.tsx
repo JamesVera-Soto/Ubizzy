@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import HomeScreen from "./components/HomeScreen"
 import Image from "next/image"
+import AuthPage from "./app/signin/page"
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
@@ -28,6 +29,6 @@ export default function Home() {
     )
   }
 
-  return <HomeScreen />
+  return <AuthPage />
 }
 
