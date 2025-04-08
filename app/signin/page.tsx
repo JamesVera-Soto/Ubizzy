@@ -12,7 +12,7 @@ export default function AuthPage() {
 
   const handleCreateAccount = () => {
     // Redirect to the create account page
-    router.push("/auth/create-account");
+    router.push("/signup");
   };
 
   return (
