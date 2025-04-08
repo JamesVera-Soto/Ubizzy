@@ -29,6 +29,6 @@ export default function Home() {
       </div>
     )
   }
-  router.push('signin');
+  router.push('/auth');
 }
 
