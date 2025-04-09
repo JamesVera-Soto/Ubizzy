@@ -137,7 +137,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack }) => {
 
           {/* Actions */}
           <div className="p-6">
-            <button onClick={logout} className="flex items-center gap-2 text-red-600 hover:text-red-700">
+            <button onClick={() => {router.push('/')}} className="flex items-center gap-2 text-red-600 hover:text-red-700">
               <LogOut className="w-5 h-5" />
               <span>Log Out</span>
             </button>
